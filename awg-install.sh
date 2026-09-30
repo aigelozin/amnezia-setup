@@ -49,7 +49,7 @@ PORT=$(shuf -i 10000-65000 -n 1)
 JC=$(shuf -i 4-12 -n 1)
 S1=$(shuf -i 15-150 -n 1)
 while :; do S2=$(shuf -i 15-150 -n 1); [ $((S1 + 56)) -ne "$S2" ] && break; done
-read -r H1 H2 H3 H4 < <(shuf -i 5-2147483647 -n 4 | tr '\n' ' ')
+read -r H1 H2 H3 H4 <<< "$(shuf -i 5-2147483647 -n 4 | tr '\n' ' ')"
 OBF="Jc = $JC
 Jmin = 8
 Jmax = 80
