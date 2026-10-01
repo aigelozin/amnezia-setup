@@ -1,9 +1,10 @@
 #!/bin/bash
 # Установка сервера AmneziaWG + конфиг первого клиента (Часть 2 инструкции).
 # Запуск на сервере от root:  bash awg-install.sh
+# Необязательные переменные: PORT=443 ENDPOINT_IP=1.2.3.4 bash awg-install.sh
 set -euo pipefail
 
-ENDPOINT_IP="103.115.18.49"
+ENDPOINT_IP="${ENDPOINT_IP:-$(curl -4 -fsS --max-time 5 https://ifconfig.me || ip -4 route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}')}"
 DIR=/etc/amnezia/amneziawg
 
 if [ -f "$DIR/awg0.conf" ]; then
@@ -45,7 +46,7 @@ IFACE=$(ip route show default | awk '{for(i=1;i<=NF;i++) if($i=="dev") print $(i
 echo "Интерфейс: $IFACE"
 
 # Случайные параметры обфускации по правилам из таблицы инструкции
-PORT=$(shuf -i 10000-65000 -n 1)
+PORT="${PORT:-$(shuf -i 10000-65000 -n 1)}"
 JC=$(shuf -i 4-12 -n 1)
 S1=$(shuf -i 15-150 -n 1)
 while :; do S2=$(shuf -i 15-150 -n 1); [ $((S1 + 56)) -ne "$S2" ] && break; done
